@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{506ED4B9-160F-44DC-99B7-07BA42D7A7C0}</ProjectGuid>
+    <RootNamespace>ThesisTest1</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\include;"..\..\..\include";..\..\Cinder-KCB2\src;..\..\Cinder-KCB2\lib;$(KINECTSDK20_DIR)\inc;..\..\Cinder-OpenCV\include;..\..\Cinder-OpenCV\include\opencv2</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>"..\..\..\include";..\include</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>cinder-$(PlatformToolset)_d.lib;OpenGL32.lib;%(AdditionalDependencies);..\..\Cinder-KCB2\lib\$(PlatformTarget)\$(Configuration)\KCBv2.lib;$(KINECTSDK20_DIR)\lib\$(PlatformTarget)\kinect20.lib;$(KINECTSDK20_DIR)\lib\$(PlatformTarget)\Kinect20.Face.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_calib3d249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_contrib249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_core249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_features2d249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_flann249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_gpu249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_imgproc249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_legacy249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_ml249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_nonfree249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_objdetect249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_ocl249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_photo249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_stitching249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_superres249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_ts249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_video249d.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_videostab249d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>"..\..\..\lib\msw\$(PlatformTarget)"</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+      <IgnoreSpecificDefaultLibraries>LIBCMT;LIBCPMT</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y "..\..\Cinder-KCB2\lib\$(PlatformTarget)\$(Configuration)\KCBv2.dll" "$(OutDir)"
+xcopy /y "$(KINECTSDK20_DIR)Redist\Face\$(PlatformTarget)\Kinect20.Face.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\include;"..\..\..\include";..\..\Cinder-KCB2\src;..\..\Cinder-KCB2\lib;$(KINECTSDK20_DIR)\inc;..\..\Cinder-OpenCV\include;..\..\Cinder-OpenCV\include\opencv2</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>"..\..\..\include";..\include</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>cinder-$(PlatformToolset).lib;OpenGL32.lib;%(AdditionalDependencies);..\..\Cinder-KCB2\lib\$(PlatformTarget)\KCBv2.lib;$(KINECTSDK20_DIR)\lib\$(PlatformTarget)\kinect20.lib;$(KINECTSDK20_DIR)\lib\$(PlatformTarget)\Kinect20.Face.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_calib3d249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_contrib249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_core249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_features2d249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_flann249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_gpu249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_imgproc249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_legacy249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_ml249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_nonfree249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_objdetect249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_ocl249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_photo249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_stitching249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_superres249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_ts249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_video249.lib;..\..\Cinder-OpenCV\lib\vc2013\x86\opencv_videostab249.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>"..\..\..\lib\msw\$(PlatformTarget)"</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding />
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y "..\..\Cinder-KCB2\lib\$(PlatformTarget)\KCBv2.dll" "$(OutDir)"
+xcopy /y "$(KINECTSDK20_DIR)Redist\Face\$(PlatformTarget)\Kinect20.Face.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <ClCompile Include="..\src\Shape.cpp" />
+    <ClCompile Include="..\src\ThesisTest1App.cpp" />
+    <ClCompile Include="..\..\Cinder-KCB2\src\Kinect2.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Resources.h" />
+    <ClInclude Include="..\..\Cinder-KCB2\src\Kinect2.h" />
+    <ClInclude Include="..\..\Cinder-OpenCV\include\CinderOpenCV.h" />
+    <ClInclude Include="..\src\Shape.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
