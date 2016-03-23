@@ -16,13 +16,10 @@ class ThesisTest1App : public App {
 public:
 	ThesisTest1App();
 
-	void setup() override;
-	void mouseDown(MouseEvent event) override;
+	void setup();
+	void prepareSettings(Settings* settings);
 	void update() override;
 	void draw() override;
-
-	// store tracked shapes
-	vector<Shape> mTrackedShapes;
 
 	// all pixels below near limit and above far limit are set to far limit depth
 	short mNearLimit;
@@ -44,16 +41,27 @@ private:
 
 	cv::Mat mInput;
 
+	ci::Surface8u mSurface;
 	ci::Surface8u mSurfaceDepth;
+	ci::Surface8u mSurfaceBlur;
 	ci::Surface8u mSurfaceSubtract;
+	gl::TextureRef mTexture;
+	gl::TextureRef mTextureDepth;
+
+	cv::Mat mPreviousFrame;
+	cv::Mat mBackground;
 
 	typedef vector< vector<cv::Point > > ContourVector;
 	ContourVector mContours;
 	ContourVector mApproxContours;
+	int mStepSize;
+	int mBlurAmount;
 	int shapeUID;
 
 	cv::vector<cv::Vec4i> mHierarchy;
 	vector<Shape> mShapes;
+	// store tracked shapes
+	vector<Shape> mTrackedShapes;
 
 	cv::Mat removeBlack(cv::Mat input, short nearLimit, short farLimit);
 	vector< Shape > getEvaluationSet(ContourVector rawContours, int minimalArea, int maxArea);
@@ -84,10 +92,19 @@ ThesisTest1App::ThesisTest1App()
 		mChannelInfrared = frame.getChannel();
 	});
 
-	mParams = params::InterfaceGl::create("Params", ivec2(200, 100));
-	mParams->addParam("Frame rate", &mFrameRate, "", true);
-	mParams->addParam("Full screen", &mFullScreen).key("f");
-	mParams->addButton("Quit", [&]() { quit(); }, "key=q");
+	mParams = params::InterfaceGl::create("Params", ivec2(255, 200));
+	//mParams->addParam("Frame rate", &mFrameRate, "", true);
+	//mParams->addParam("Full screen", &mFullScreen).key("f");
+	//mParams->addButton("Quit", [&]() { quit(); }, "key=q");
+	mParams->addParam("Thresh", &mThresh, "min=0.0f max=255.0f step 1.0 keyIncr=a keyDecr=s");
+	mParams->addParam("Maxval", &mMaxVal, "min=0.0f max=255.0f step=1.0 keyIncr=q keyDecr=w");
+	mStepSize = 10;
+	mBlurAmount = 10;
+}
+
+void ThesisTest1App::prepareSettings(Settings* settings) {
+	settings->setFrameRate(60.0f);
+	settings->setWindowSize(800, 800);
 }
 
 void ThesisTest1App::setup()
@@ -100,12 +117,8 @@ void ThesisTest1App::setup()
 	// set the threshold to ignore all black pixels and pixels that are far away from the camera
 	mNearLimit = 30;
 	mFarLimit = 4000;
-	mThresh = 0;
-	mMaxVal = 255;
-}
-
-void ThesisTest1App::mouseDown(MouseEvent event)
-{
+	mThresh = 0.0;
+	mMaxVal = 255.0;
 }
 
 void ThesisTest1App::update()
@@ -140,7 +153,7 @@ void ThesisTest1App::update()
 		vector<cv::Point> approx;
 		// approx number of points per contour
 		for (int i = 0; i < mContours.size(); i++) {
-			cv::approxPolyDP(mContours[i], approx, 1, true);
+			cv::approxPolyDP(mContours[i], approx, 3, true);
 			mApproxContours.push_back(approx);
 		}
 
@@ -157,14 +170,14 @@ void ThesisTest1App::update()
 				nearestShape->matchFound = true;
 				mTrackedShapes[i].centroid = nearestShape->centroid;
 				// get depth value from center point
-				float centerDepth = (float)mInput.at<short>(mTrackedShapes[i].centroid.y, mTrackedShapes[i].centroid.x);
+				//float centerDepth = (float)mInput.at<short>(mTrackedShapes[i].centroid.y, mTrackedShapes[i].centroid.x);
 				// map 10 4000 to 0 1
-				mTrackedShapes[i].depth = lmap(centerDepth, (float)mNearLimit, (float)mFarLimit, 0.0f, 1.0f);
+				//mTrackedShapes[i].depth = lmap(centerDepth, (float)mNearLimit, (float)mFarLimit, 0.0f, 1.0f);
 				mTrackedShapes[i].lastFrameSeen = ci::app::getElapsedFrames();
 				mTrackedShapes[i].hull.clear();
 				mTrackedShapes[i].hull = nearestShape->hull;
-				mTrackedShapes[i].moving = nearestShape->moving;
-				mTrackedShapes[i].motion = nearestShape->motion;
+				//mTrackedShapes[i].moving = nearestShape->moving;
+				//mTrackedShapes[i].motion = nearestShape->motion;
 			}
 		}
 
@@ -174,7 +187,7 @@ void ThesisTest1App::update()
 				// assign an unique ID
 				mShapes[i].ID = shapeUID;
 				mShapes[i].lastFrameSeen = ci::app::getElapsedFrames();
-				mShapes[i].moving = true;
+				//mShapes[i].moving = true;
 				// add this new shape to tracked shapes
 				mTrackedShapes.push_back(mShapes[i]);
 				shapeUID++;
@@ -191,25 +204,79 @@ void ThesisTest1App::update()
 				++it;
 			}
 		}
+
+		cv::Mat gray8Bit;
+		withoutBlack.convertTo(gray8Bit, CV_8UC3, 0.1 / 1.0);
+
 		mSurfaceDepth = Surface8u(fromOcv(mInput));
+		mSurfaceBlur = Surface8u(fromOcv(withoutBlack));
 		mSurfaceSubtract = Surface8u(fromOcv(eightBit));
 	}
 }
 
 void ThesisTest1App::draw()
 {
+	// clear out the window with black
+	gl::clear(Color(1, 1, 1));
+
+	if (mSurfaceDepth.getWidth() > 0) {
+		if (mTextureDepth) {
+			mTextureDepth->update(Channel32f(mSurfaceDepth));
+		}
+		else {
+			mTextureDepth = gl::Texture::create(Channel32f(mSurfaceDepth));
+		}
+		gl::color(Color::white());
+		gl::draw(mTextureDepth, mTextureDepth->getBounds());
+	}
+	gl::pushMatrices();
+	gl::translate(vec2(320, 0));
+
+	if (mSurfaceBlur.getWidth() > 0) {
+		if (mTextureDepth) {
+			mTextureDepth->update(Channel32f(mSurfaceBlur));
+		}
+		else {
+			mTextureDepth = gl::Texture::create(Channel32f(mSurfaceSubtract));
+		}
+		gl::draw(mTextureDepth, mTextureDepth->getBounds());
+	}
+	gl::translate(vec2(0, 240));
+
+	if (mSurfaceSubtract.getWidth() > 0) {
+		if (mTextureDepth) {
+			mTextureDepth->update(Channel32f(mSurfaceSubtract));
+		}
+		else {
+			mTextureDepth = gl::Texture::create(Channel32f(mSurfaceSubtract));
+		}
+		gl::draw(mTextureDepth, mTextureDepth->getBounds());
+	}
+	gl::translate(vec2(-320, 0));
+	
 	// draw shapes
-	for (int i = 0; i < mTrackedShapes.size(); i++) {
-		gl::begin(GL_LINES);
-		for (int j = 0; j < mTrackedShapes[i].hull.size(); j++) {
-			if (mTrackedShapes[i].moving) {
-				gl::color(Color(0.0f, 1.0f, 0.0f));
-				vec2 v = fromOcv(mTrackedShapes[i].hull[j]);
-				gl::vertex(v);
-			}
+	for (ContourVector::iterator iter = mContours.begin(); iter != mContours.end(); ++iter) {
+		gl::begin(GL_LINE_LOOP);
+		for (vector<cv::Point>::iterator pt = iter->begin(); pt != iter->end(); ++pt) {
+			gl::color(Color(1.0f, 0.0f, 0.0f));
+			gl::vertex(fromOcv(*pt));
 		}
 		gl::end();
 	}
+	gl::translate(vec2(0, 240));
+	for (int i = 0; i < mTrackedShapes.size(); i++) {
+		gl::begin(GL_POINTS);
+		for (int j = 0; j < mTrackedShapes[i].hull.size(); j++) {
+			//if (mTrackedShapes[i].moving) {
+				gl::color(Color(1.0f, 0.0f, 0.0f));
+				//vec2 v = fromOcv(mTrackedShapes[i].hull[j]);
+				gl::vertex(fromOcv(mTrackedShapes[i].hull[j]));
+			//}
+		}
+		gl::end();
+	}
+	gl::popMatrices();
+	mParams->draw();
 }
 
 cv::Mat ThesisTest1App::removeBlack(cv::Mat input, short nearLimit, short farLimit)
@@ -252,9 +319,9 @@ vector< Shape > ThesisTest1App::getEvaluationSet(ContourVector rawContours, int 
 		shape.centroid = cv::Point(center.val[0], center.val[1]);
 
 		// get depth value from center point
-		float centerDepth = (float)mInput.at<short>(shape.centroid.y, shape.centroid.x);
+		//float centerDepth = (float)mInput.at<short>(shape.centroid.y, shape.centroid.x);
 		// map 10 4000 to 0 1
-		shape.depth = lmap(centerDepth, (float)mNearLimit, (float)mFarLimit, 0.0f, 1.0f);
+		//shape.depth = lmap(centerDepth, (float)mNearLimit, (float)mFarLimit, 0.0f, 1.0f);
 
 		// store points around shape
 		shape.hull = c;
@@ -273,7 +340,7 @@ Shape* ThesisTest1App::findNearestMatch(Shape trackedShape, vector< Shape > &sha
 	}
 
 	// finalDist keeps track of the distance between the trackedShape and the chosen candidate
-	float finalDist;
+	//float finalDist;
 
 	for (Shape &candidate : shapes) {
 		// find dist between the center of the contour and the shape
@@ -288,27 +355,27 @@ Shape* ThesisTest1App::findNearestMatch(Shape trackedShape, vector< Shape > &sha
 		if (dist < nearestDist) {
 			nearestDist = dist;
 			closestShape = &candidate;
-			finalDist = dist;
+			//finalDist = dist;
 		}
 	}
 
 	// if a candidate was matched to the tracked shape
-	if (closestShape) {
-		// if the shape isn't moving
-		if (finalDist < 1.5) {
-			// 'dilute' motion
-			closestShape->motion = trackedShape.motion * .995;
-			// if diluted motion is under the threshold or it was already not moving, the object is not moving
-			if (closestShape->motion < 1.5 || trackedShape.moving == false) {
-				closestShape->moving = false;
-				closestShape->motion = 0;
-			}
-		}
-		else if (finalDist > 19 || trackedShape.moving == true) {
-			closestShape->moving = true;
-			closestShape->motion = finalDist;
-		}
-	}
+	//if (closestShape) {
+	//	// if the shape isn't moving
+	//	if (finalDist < 1.5) {
+	//		// 'dilute' motion
+	//		closestShape->motion = trackedShape.motion * .995;
+	//		// if diluted motion is under the threshold or it was already not moving, the object is not moving
+	//		if (closestShape->motion < 1.5 || trackedShape.moving == false) {
+	//			closestShape->moving = false;
+	//			closestShape->motion = 0;
+	//		}
+	//	}
+	//	else if (finalDist > 19 || trackedShape.moving == true) {
+	//		closestShape->moving = true;
+	//		closestShape->motion = finalDist;
+	//	}
+	//}
 	return closestShape;
 }
 
