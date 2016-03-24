@@ -4,6 +4,7 @@
 #include "cinder/gl/gl.h"
 
 #include "Kinect2.h"
+//#include "Kinect2b.h"
 #include "CinderOpenCV.h"
 
 #include "Shape.h"
@@ -30,6 +31,7 @@ public:
 	double mMaxVal;
 private:
 	Kinect2::DeviceRef mDevice;
+	Kinect2::DeviceRef mDevice2;
 	ci::Channel8uRef mChannelBodyIndex;
 	ci::Channel16uRef mChannelDepth;
 	ci::Channel16uRef mChannelInfrared;
@@ -73,6 +75,7 @@ ThesisTest1App::ThesisTest1App()
 	mFrameRate = 0.0f;
 	mFullScreen = false;
 
+	console() << Kinect2::getDeviceCount() << endl;
 	mDevice = Kinect2::Device::create();
 	mDevice->start();
 	mDevice->connectBodyIndexEventHandler([&](const Kinect2::BodyIndexFrame& frame)

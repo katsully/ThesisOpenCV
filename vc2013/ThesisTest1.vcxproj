@@ -116,7 +116,6 @@
     <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup />
   <ItemGroup>
     <ClCompile Include="..\src\Shape.cpp" />
     <ClCompile Include="..\src\ThesisTest1App.cpp" />
