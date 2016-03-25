@@ -51,7 +51,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include;"..\..\..\include";..\..\Cinder-KCB2\src;..\..\Cinder-KCB2\lib;$(KINECTSDK20_DIR)\inc;..\..\Cinder-OpenCV\include;..\..\Cinder-OpenCV\include\opencv2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;"..\..\..\include";..\..\Cinder-KCB2\src;..\..\Cinder-KCB2\lib;$(KINECTSDK20_DIR)\inc;..\..\Cinder-OpenCV\include;..\..\Cinder-OpenCV\include\opencv2;..\..\Cinder-KCB2B\src;..\..\Cinder-KCB2B\lib</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -117,11 +117,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ClCompile Include="..\..\Cinder-KCB2B\src\Kinect2b.cpp" />
     <ClCompile Include="..\src\Shape.cpp" />
     <ClCompile Include="..\src\ThesisTest1App.cpp" />
     <ClCompile Include="..\..\Cinder-KCB2\src\Kinect2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Cinder-KCB2B\src\Kinect2b.h" />
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\..\Cinder-KCB2\src\Kinect2.h" />
     <ClInclude Include="..\..\Cinder-OpenCV\include\CinderOpenCV.h" />

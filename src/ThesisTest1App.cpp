@@ -2,9 +2,10 @@
 #include "cinder/params/Params.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
+#include "cinder/audio/Device.h"
 
 #include "Kinect2.h"
-//#include "Kinect2b.h"
+#include "Kinect2b.h"
 #include "CinderOpenCV.h"
 
 #include "Shape.h"
@@ -31,9 +32,11 @@ public:
 	double mMaxVal;
 private:
 	Kinect2::DeviceRef mDevice;
-	Kinect2::DeviceRef mDevice2;
+	Kinect2b::DeviceRef mDevice2;
+	
 	ci::Channel8uRef mChannelBodyIndex;
 	ci::Channel16uRef mChannelDepth;
+	ci::Channel16uRef mChannelDepth2;
 	ci::Channel16uRef mChannelInfrared;
 	ci::Surface8uRef mSurfaceColor;
 
@@ -45,10 +48,12 @@ private:
 
 	ci::Surface8u mSurface;
 	ci::Surface8u mSurfaceDepth;
+	ci::Surface8u mSurfaceDepth2;
 	ci::Surface8u mSurfaceBlur;
 	ci::Surface8u mSurfaceSubtract;
 	gl::TextureRef mTexture;
 	gl::TextureRef mTextureDepth;
+	gl::TextureRef mTextureDepth2;
 
 	cv::Mat mPreviousFrame;
 	cv::Mat mBackground;
@@ -75,9 +80,27 @@ ThesisTest1App::ThesisTest1App()
 	mFrameRate = 0.0f;
 	mFullScreen = false;
 
-	console() << Kinect2::getDeviceCount() << endl;
+	// find all devices
+	vector<ci::audio::DeviceRef> devices = ci::audio::Device::getInputDevices();
+	console() << devices.size() << endl;
+	for (audio::DeviceRef d : devices) {
+		//audio::Device* device = d;
+		console() << d->printDevicesToString() << endl;
+		if (d->getName().find("Xbox") != std::string::npos) {
+			console() << "HERE" << endl;
+			d->getSignalParamsDidChange();
+			Kinect2::DeviceRef(d);
+			//App::get()->getSignalUpdate().connect(bind(&Device::update, this));
+			//App::get()->getSi
+		}
+		
+	}
+
 	mDevice = Kinect2::Device::create();
+	mDevice2 = Kinect2b::Device::create();
+
 	mDevice->start();
+	mDevice2->start();
 	mDevice->connectBodyIndexEventHandler([&](const Kinect2::BodyIndexFrame& frame)
 	{
 		mChannelBodyIndex = frame.getChannel();
@@ -89,6 +112,10 @@ ThesisTest1App::ThesisTest1App()
 	mDevice->connectDepthEventHandler([&](const Kinect2::DepthFrame& frame)
 	{
 		mChannelDepth = frame.getChannel();
+	});
+	mDevice2->connectDepthEventHandler([&](const Kinect2b::DepthFrame& frame)
+	{
+		mChannelDepth2 = frame.getChannel();
 	});
 	mDevice->connectInfraredEventHandler([&](const Kinect2::InfraredFrame& frame)
 	{

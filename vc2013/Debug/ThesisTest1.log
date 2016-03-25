@@ -1,11 +1,11 @@
 ﻿  ThesisTest1App.cpp
-c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(158): warning C4018: '<' : signed/unsigned mismatch
-c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(168): warning C4018: '<' : signed/unsigned mismatch
-c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(188): warning C4018: '<' : signed/unsigned mismatch
-c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(270): warning C4018: '<' : signed/unsigned mismatch
-c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(272): warning C4018: '<' : signed/unsigned mismatch
-c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(322): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(351): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(185): warning C4018: '<' : signed/unsigned mismatch
+c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(195): warning C4018: '<' : signed/unsigned mismatch
+c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(215): warning C4018: '<' : signed/unsigned mismatch
+c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(297): warning C4018: '<' : signed/unsigned mismatch
+c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(299): warning C4018: '<' : signed/unsigned mismatch
+c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(349): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+c:\users\itp student\documents\cinder\blocks\thesistest1\src\thesistest1app.cpp(378): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
   ThesisTest1.vcxproj -> C:\Users\itp student\Documents\Cinder\blocks\ThesisTest1\vc2013\Debug\ThesisTest1.exe
   ..\..\Cinder-KCB2\lib\x86\Debug\KCBv2.dll
   1 File(s) copied

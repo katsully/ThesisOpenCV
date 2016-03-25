@@ -28,6 +28,12 @@
     <Filter Include="Blocks\OpenCV\include">
       <UniqueIdentifier>{6D49E884-63BD-4961-9EE9-D2636C4E7A75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Blocks\Cinder-KCB2B">
+      <UniqueIdentifier>{20019d84-1146-41af-bd97-7ac6ed2e9f92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\Cinder-KCB2B\src">
+      <UniqueIdentifier>{12ca0bb9-e52a-4507-b7eb-6a36f7ebfc37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ThesisTest1App.cpp">
@@ -51,6 +57,9 @@
     <ClCompile Include="..\src\Shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Cinder-KCB2B\src\Kinect2b.cpp">
+      <Filter>Blocks\Cinder-KCB2B\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -58,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Shape.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Cinder-KCB2B\src\Kinect2b.h">
+      <Filter>Blocks\Cinder-KCB2B\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
