@@ -89,6 +89,7 @@ ThesisTest1App::ThesisTest1App()
 		if (d->getName().find("Xbox") != std::string::npos) {
 			console() << "HERE" << endl;
 			d->getSignalParamsDidChange();
+			
 			Kinect2::DeviceRef(d);
 			//App::get()->getSignalUpdate().connect(bind(&Device::update, this));
 			//App::get()->getSi
@@ -112,10 +113,6 @@ ThesisTest1App::ThesisTest1App()
 	mDevice->connectDepthEventHandler([&](const Kinect2::DepthFrame& frame)
 	{
 		mChannelDepth = frame.getChannel();
-	});
-	mDevice2->connectDepthEventHandler([&](const Kinect2b::DepthFrame& frame)
-	{
-		mChannelDepth2 = frame.getChannel();
 	});
 	mDevice->connectInfraredEventHandler([&](const Kinect2::InfraredFrame& frame)
 	{
@@ -146,7 +143,7 @@ void ThesisTest1App::setup()
 
 	// set the threshold to ignore all black pixels and pixels that are far away from the camera
 	mNearLimit = 30;
-	mFarLimit = 4000;
+	mFarLimit = 5000;
 	mThresh = 0.0;
 	mMaxVal = 255.0;
 }
